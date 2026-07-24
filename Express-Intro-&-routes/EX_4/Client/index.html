@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Item Price Checker</title>
+</head>
+<body>
+
+  <label for="itemInput">Select item:</label><br><br>
+
+  <input type="text" id="itemInput" placeholder="Enter item name"><br><br>
+
+  <button id="checkBtn">Check Price</button><br><br>
+
+  <label id="resultLabel"></label>
+
+  <script>
+    document.getElementById("checkBtn").onclick = async () => {
+      const item = document.getElementById("itemInput").value.trim();
+
+      if (!item) {
+        document.getElementById("resultLabel").textContent = "Please enter an item.";
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:3000/priceCheck/${item}`);
+        console.log(response);
+        const data = await response.json();
+
+        if (response.ok) {
+          document.getElementById("resultLabel").textContent = `Price: ${data.price}`;
+        } else {
+          document.getElementById("resultLabel").textContent = data.message || "Error";
+        }
+      } catch (err) {
+        document.getElementById("resultLabel").textContent = "Server error";
+      }
+    };
+  </script>
+
+</body>
+</html>
