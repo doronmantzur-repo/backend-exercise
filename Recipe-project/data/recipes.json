@@ -1,0 +1,38 @@
+[
+  {
+    "title": "Recipe Title9",
+    "description": "Brief description",
+    "ingredients": [
+      "ingredient 1",
+      "ingredient 2"
+    ],
+    "instructions": [
+      "step 1",
+      "step 2"
+    ],
+    "cookingTime": 30,
+    "servings": 4,
+    "difficulty": "easy",
+    "rating": 4.5,
+    "id": "BYQxt8L",
+    "createdAt": "2026-07-25T20:12:25.437Z"
+  },
+  {
+    "title": "Recipe Title4",
+    "description": "Brief description",
+    "ingredients": [
+      "ingredient 1",
+      "ingredient 2"
+    ],
+    "instructions": [
+      "step 1",
+      "step 2"
+    ],
+    "cookingTime": 30,
+    "servings": 4,
+    "difficulty": "easy",
+    "rating": 4.5,
+    "id": "8K2vioG",
+    "createdAt": "2026-07-25T20:16:00.471Z"
+  }
+]
