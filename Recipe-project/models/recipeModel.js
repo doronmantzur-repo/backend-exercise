@@ -53,10 +53,45 @@ async function deleteRecipe(id) {
   return recipes[index];
 }
 
+async function getRecipeByQuery(queryObj) {
+  const recipes = await getRecipes();
+  let filteredRecipes = recipes;
+  for (const key in queryObj) {
+    const value = queryObj[key];
+
+    switch (key) {
+      case "difficulty":
+        console.log("Difficulty:", value);
+        filteredRecipes = filteredRecipes.filter((recipe) => recipe.difficulty === value);
+        break;
+
+      case "maxCookingTime":
+        const num = Number(value);
+        console.log("Max cooking time:", num);
+        filteredRecipes = filteredRecipes.filter((recipe) => recipe.cookingTime <= num);
+        break;
+
+      case "search":
+        console.log("Search term:", value);
+        filteredRecipes = filteredRecipes.filter(
+          (recipe) =>
+            recipe.title.toLowerCase().includes(value.toLowerCase()) ||
+            recipe.description.toLowerCase().includes(value.toLowerCase()),
+        );
+        break;
+
+      default:
+        console.log("Unknown key:", key);
+    }
+  }
+  return filteredRecipes;
+}
+
 module.exports = {
   getRecipes,
   getRecipeById,
   addRecipe,
   updateRecipe,
   deleteRecipe,
+  getRecipeByQuery,
 };

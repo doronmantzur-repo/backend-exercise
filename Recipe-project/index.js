@@ -3,12 +3,36 @@ const app = express();
 const port = 8080;
 const recipeRouter = require("./routes/recipeRoutes.js");
 
+const cors = require("cors");
+
+
+//by cors I can define the domains that are allowed to access the API (this is a browser protection)
+//for example 
+// app.use(cors({
+//   origin: 'http://localhost:3000'
+// }));
+//Execute middleware over all routes
+app.use(cors());
+
+
 
 
 
 //middleware that parse JSON every route
 app.use(express.json());
 app.use("/recipes", recipeRouter);
+
+//error handling middleware - has to be the last middleware
+//Usually it is implemented inline
+app.use((err, req, res, next) => {
+    res.status(err.status || 500).json({
+        error: true,
+        message: err.message,
+        statusCode: err.status || 500
+    });
+});
+    
+
 
 recipeRouter.get("/", (req, res) => {
     res.send("Hello World!");
