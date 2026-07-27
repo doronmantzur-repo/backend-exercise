@@ -1,26 +1,56 @@
 [
   {
-    "title": "Recipe Title9",
+    "title": "Recipe Title1",
     "description": "Brief description",
-    "ingredients": ["ingredient 1", "ingredient 2"],
-    "instructions": ["step 1", "step 2"],
-    "cookingTime": 30,
+    "ingredients": [
+      "ingredient 1",
+      "ingredient 2"
+    ],
+    "instructions": [
+      "step 1",
+      "step 2"
+    ],
+    "cookingTime": 4.5,
     "servings": 4,
-    "difficulty": "hard",
+    "difficulty": "easy",
     "rating": 4.5,
-    "id": "BYQxt8L",
-    "createdAt": "2026-07-25T20:12:25.437Z"
+    "id": "edbb0e5d-1485-446c-8503-d847cf5c1635",
+    "createdAt": "2026-07-26T12:51:44.028Z"
   },
   {
-    "title": "Recipe Title4",
-    "description": " description",
-    "ingredients": ["ingredient 1", "ingredient 2"],
-    "instructions": ["step 1", "step 2"],
+    "title": "Recipe Title2",
+    "description": "Brief description",
+    "ingredients": [
+      "ingredient 1",
+      "ingredient 2"
+    ],
+    "instructions": [
+      "step 1",
+      "step 2"
+    ],
+    "cookingTime": 3.5,
+    "servings": 4,
+    "difficulty": "medium",
+    "rating": 4.5,
+    "id": "9ac1779b-b1ad-4493-84b7-89b2154f46e8",
+    "createdAt": "2026-07-26T12:51:59.798Z"
+  },
+  {
+    "title": "Recipe Title9",
+    "description": "Brief description",
+    "ingredients": [
+      "ingredient 1",
+      "ingredient 2"
+    ],
+    "instructions": [
+      "step 1",
+      "step 2"
+    ],
     "cookingTime": 30,
     "servings": 4,
     "difficulty": "easy",
     "rating": 4.5,
-    "id": "8K2vioG",
-    "createdAt": "2026-07-25T20:16:00.471Z"
+    "id": "69093a2b-6b59-4cea-a3c7-feb0fcc47eff",
+    "createdAt": "2026-07-26T12:52:09.826Z"
   }
 ]

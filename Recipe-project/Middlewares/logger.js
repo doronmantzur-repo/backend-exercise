@@ -1,9 +1,14 @@
+const morgan = require('morgan');
+const fs = require('fs');
+const path = require('path');
 
+// Create a write stream for logging (append mode)
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, '../logs/access.log'),
+  { flags: 'a' }
+);
 
-function logger(req, res, next){
-    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
-    //indicates to the middleware to move to the next middleware if exists
-    next();
-}
+// Export Morgan middleware
+const logger = morgan('combined', { stream: accessLogStream });
 
 module.exports = logger;

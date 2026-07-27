@@ -1,22 +1,20 @@
-const express = require ("express");
+const express = require("express");
 const app = express();
 const port = 8080;
 const recipeRouter = require("./routes/recipeRoutes.js");
+const logger = require("./middlewares/logger.js");
 
 const cors = require("cors");
 
+app.use(logger);
 
 //by cors I can define the domains that are allowed to access the API (this is a browser protection)
-//for example 
+//for example
 // app.use(cors({
 //   origin: 'http://localhost:3000'
 // }));
 //Execute middleware over all routes
 app.use(cors());
-
-
-
-
 
 //middleware that parse JSON every route
 app.use(express.json());
@@ -25,23 +23,16 @@ app.use("/recipes", recipeRouter);
 //error handling middleware - has to be the last middleware
 //Usually it is implemented inline
 app.use((err, req, res, next) => {
-    res.status(err.status || 500).json({
-        error: true,
-        message: err.message,
-        statusCode: err.status || 500
-    });
+  res.status(err.status || 500).json({
+    error: true,
+    message: err.message,
+    statusCode: err.status || 500,
+  });
 });
-    
-
 
 recipeRouter.get("/", (req, res) => {
-    res.send("Hello World!");
+  res.send("Hello World!");
 });
-
-
-
-
-
 
 // app.get("/demo", (req, res) => {
 //     console.log("Headers:", req.headers);
@@ -98,10 +89,8 @@ recipeRouter.get("/", (req, res) => {
 //     res.status(404).send("page not found");
 // });
 
-
-
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
+  console.log(`Example app listening on port ${port}`);
 });
 
 module.exports = app;

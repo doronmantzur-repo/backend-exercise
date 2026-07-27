@@ -3,11 +3,11 @@ const { z } = require("zod");
 const recipeQuerySchema = z
   .object({
     difficulty: z.enum(["easy", "medium", "hard"]).optional(),
-    maxCookingTime: z
+    cookingTime: z
       .string()
       .transform((val) => Number(val))
       .refine((val) => !isNaN(val) && val > 0, {
-        message: "maxCookingTime must be a positive number",
+        message: "cookingTime must be a positive number",
       })
       .optional(),
     search: z.string().min(1).optional(),

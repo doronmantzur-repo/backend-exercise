@@ -27,9 +27,6 @@ async function getRecipeById(req, res) {
 }
 
 async function addRecipe(req, res) {
-  if (!validation) {
-    return res.status(400).send(validation.message);
-  }
   try {
     const newRecipe = await recipeModel.addRecipe(req.body);
     res.status(201).json(newRecipe);
@@ -39,17 +36,16 @@ async function addRecipe(req, res) {
 }
 
 async function updateRecipe(req, res) {
-  if (!validation) {
-    return res.status(400).send(validation.message);
-  }
   try {
     const updatedRecipe = await recipeModel.updateRecipe(
       req.params.id,
       req.body,
     );
     res.status(200).json(updatedRecipe);
-  } catch (error) {
-    res.status(500).send("Error updating recipe");
+  } catch (err) {
+    const error = new Error("Recipe not found");
+    error.status = 404;
+    throw error;
   }
 }
 
@@ -60,17 +56,16 @@ async function deleteRecipe(req, res) {
       return res.status(404).send("Recipe not found");
     }
     res.status(200).json(deletedRecipe);
-  } catch (error) {
-    res.status(500).send("Error deleting recipe");
+  } catch (err) {
+    const error = new Error("Recipe not found");
+    error.status = 404;
+    throw error;
   }
 }
 
 async function getRecipesByQuery(req, res) {
   try {
-    // console.log(req.query);
     const queryObj = { ...req.query };
-    // console.log(queryObj);
-    // console.log(Object.keys(req.query));
     const recipes = await recipeModel.getRecipeByQuery(queryObj);
     res.status(200).json(recipes);
   } catch (error) {

@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { nanoid } = require("nanoid");
+const { v4: uuidv4 } = require("uuid");
 
 async function getRecipes() {
   const data = await fs.promises.readFile("./data/recipes.json", "utf8");
@@ -13,13 +13,14 @@ async function getRecipeById(id) {
 
 async function addRecipe(newRecipe) {
   const recipes = await getRecipes();
-  newRecipe.id = nanoid(7);
+  newRecipe.id = uuidv4();
   newRecipe.createdAt = new Date().toISOString();
   recipes.push(newRecipe);
-  await fs.promises.writeFile(
-    "./data/recipes.json",
-    JSON.stringify(recipes, null, 2),
-  );
+  await writeRecipesToFile(recipes);
+  // await fs.promises.writeFile(
+  //   "./data/recipes.json",
+  //   JSON.stringify(recipes, null, 2),
+  // );
   return newRecipe;
 }
 
@@ -27,15 +28,14 @@ async function updateRecipe(id, updatedRecipe) {
   const recipes = await getRecipes();
   const index = recipes.findIndex((recipe) => recipe.id === id);
   if (index === -1) {
-    return null;
+    const error = new Error("Recipe not found");
+    error.status = 404;
+    throw error;
   }
   updatedRecipe.id = id;
   updatedRecipe.createdAt = recipes[index].createdAt;
   recipes[index] = updatedRecipe;
-  await fs.promises.writeFile(
-    "./data/recipes.json",
-    JSON.stringify(recipes, null, 2),
-  );
+  await writeRecipesToFile(recipes);
   return recipes[index];
 }
 
@@ -43,14 +43,13 @@ async function deleteRecipe(id) {
   const recipes = await getRecipes();
   const index = recipes.findIndex((recipe) => recipe.id === id);
   if (index === -1) {
-    return null;
+    const error = new Error("Recipe not found");
+    error.status = 404;
+    throw error;
   }
   recipes.splice(index, 1);
-  await fs.promises.writeFile(
-    "./data/recipes.json",
-    JSON.stringify(recipes, null, 2),
-  );
-  return recipes[index];
+  await writeRecipesToFile(recipes);
+  return recipes;
 }
 
 async function getRecipeByQuery(queryObj) {
@@ -62,13 +61,17 @@ async function getRecipeByQuery(queryObj) {
     switch (key) {
       case "difficulty":
         console.log("Difficulty:", value);
-        filteredRecipes = filteredRecipes.filter((recipe) => recipe.difficulty === value);
+        filteredRecipes = filteredRecipes.filter(
+          (recipe) => recipe.difficulty === value,
+        );
         break;
 
-      case "maxCookingTime":
+      case "cookingTime":
         const num = Number(value);
         console.log("Max cooking time:", num);
-        filteredRecipes = filteredRecipes.filter((recipe) => recipe.cookingTime <= num);
+        filteredRecipes = filteredRecipes.filter(
+          (recipe) => recipe.cookingTime <= num,
+        );
         break;
 
       case "search":
@@ -85,6 +88,19 @@ async function getRecipeByQuery(queryObj) {
     }
   }
   return filteredRecipes;
+}
+
+async function writeRecipesToFile(recipes) {
+  try {
+    await fs.promises.writeFile(
+      "./data/recipes.json",
+      JSON.stringify(recipes, null, 2),
+    );
+  } catch (err) {
+    const error = new Error("Error writing recipes to file" + err.message);
+    error.status = 500;
+    next(error);
+  }
 }
 
 module.exports = {
