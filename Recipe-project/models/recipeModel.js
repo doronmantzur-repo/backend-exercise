@@ -133,17 +133,43 @@ async function updateRecipe(id, updatedRecipe, userId) {
 }
 
 async function deleteRecipe(id, userId) {
-  const recipes = await getRecipes(userId);
-  const index = recipes.findIndex((recipe) => recipe.id === id);
-  if (index === -1) {
-    const error = new Error("Recipe not found");
-    error.status = 404;
+  let recipe;
+
+  // Fetch the recipe first
+  const selectQuery = `
+    SELECT * FROM recipes
+    WHERE id = :id AND user_id = :userId
+  `;
+
+  try {
+    const [rows] = await sequelize.query(selectQuery, {
+      replacements: { id, userId },
+    });
+
+    recipe = rows[0]; 
+    if (!recipe) {
+      throw new Error("Recipe not found or does not belong to user");
+    }
+  } catch (error) {
     throw error;
   }
-  recipes.splice(index, 1);
-  await writeRecipesToFile(recipes);
-  return recipes;
+
+  const deleteQuery = `
+    DELETE FROM recipes
+    WHERE id = :id AND user_id = :userId
+  `;
+
+  try {
+    await sequelize.query(deleteQuery, {
+      replacements: { id, userId },
+    });
+  } catch (error) {
+    throw error;
+  }
+
+  return recipe; // return the deleted recipe
 }
+
 
 async function getRecipeByQuery(queryObj, userId) {
   const recipes = await getRecipes(userId);

@@ -21,8 +21,8 @@ router.get("/:id", getRecipeById);
 
 router.post("/",authenticate, recipeValidation, addRecipe);
 
-router.put("/:id", updateRecipe);
+router.put("/:id",authenticate, updateRecipe);
 
-router.delete("/:id", deleteRecipe);
+router.delete("/:id",authenticate, deleteRecipe);
 
 module.exports = router;
