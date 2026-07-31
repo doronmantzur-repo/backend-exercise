@@ -11,14 +11,15 @@ const {
 const logger = require("../middlewares/logger.js");
 const recipeValidation = require("../middlewares/recipeValidation.js");
 const validateRecipeQuery = require("../middlewares/queryValidation.js");
+const {authenticate} = require("../middlewares/authenticate.js");
 
-router.get("/", getRecipes);
+router.get("/", authenticate, getRecipes);
 
-router.get("/search",validateRecipeQuery, getRecipesByQuery);
+router.get("/search", validateRecipeQuery, getRecipesByQuery);
 
 router.get("/:id", getRecipeById);
 
-router.post("/", recipeValidation, addRecipe);
+router.post("/",authenticate, recipeValidation, addRecipe);
 
 router.put("/:id", updateRecipe);
 

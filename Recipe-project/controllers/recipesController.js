@@ -2,8 +2,8 @@ const recipeModel = require("../models/recipeModel.js");
 
 async function getRecipes(req, res) {
   try {
-    console.log("getRecipes");
-    const recipes = await recipeModel.getRecipes();
+    const userId = req.user.id;
+    const recipes = await recipeModel.getRecipes(userId);
     res.status(200).json(recipes);
   } catch (error) {
     res.status(500).send("Error retrieving recipes  " + error.message);
@@ -28,7 +28,8 @@ async function getRecipeById(req, res) {
 
 async function addRecipe(req, res) {
   try {
-    const newRecipe = await recipeModel.addRecipe(req.body);
+    const userId = req.user.id;
+    const newRecipe = await recipeModel.addRecipe(req.body, userId);
     res.status(201).json(newRecipe);
   } catch (error) {
     res.status(500).send("Error adding recipe");
@@ -37,9 +38,11 @@ async function addRecipe(req, res) {
 
 async function updateRecipe(req, res) {
   try {
+    const userId = req.user.id;
     const updatedRecipe = await recipeModel.updateRecipe(
       req.params.id,
       req.body,
+      userId,
     );
     res.status(200).json(updatedRecipe);
   } catch (err) {
@@ -51,7 +54,8 @@ async function updateRecipe(req, res) {
 
 async function deleteRecipe(req, res) {
   try {
-    const deletedRecipe = await recipeModel.deleteRecipe(req.params.id);
+    const userId = req.user.id;
+    const deletedRecipe = await recipeModel.deleteRecipe(req.params.id, userId);
     if (!deletedRecipe) {
       return res.status(404).send("Recipe not found");
     }
@@ -65,8 +69,9 @@ async function deleteRecipe(req, res) {
 
 async function getRecipesByQuery(req, res) {
   try {
+    const userId = req.user.id;
     const queryObj = { ...req.query };
-    const recipes = await recipeModel.getRecipeByQuery(queryObj);
+    const recipes = await recipeModel.getRecipeByQuery(queryObj, userId);
     res.status(200).json(recipes);
   } catch (error) {
     res.status(500).send("Error retrieving recipes");

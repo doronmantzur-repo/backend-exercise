@@ -1,43 +1,78 @@
-// const { DataTypes } = require('sequelize');
+const { DataTypes } = require("sequelize");
 
-//To be updated to Recipe
+module.exports = (sequelize) => {
+  const Recipe = sequelize.define(
+    "Recipe",
+    {
+      id: {
+        type: DataTypes.UUID,
+        primaryKey: true,
+        defaultValue: DataTypes.UUIDV4,
+      },
 
-// module.exports = (sequelize) => {
-//  const User = sequelize.define('User', {
-//    id: {
-//      type: DataTypes.INTEGER,
-//      primaryKey: true,
-//      autoIncrement: true
-//    },
-//    firstName: {
-//      type: DataTypes.STRING(50),
-//      allowNull: false,
-//      validate: {
-//        notEmpty: true,
-//        len: [1, 50]
-//      }
-//    },
-//    email: {
-//      type: DataTypes.STRING,
-//      allowNull: false,
-//      unique: true,
-//      validate: {
-//        isEmail: true
-//      }
-//    },
-//    age: {
-//      type: DataTypes.INTEGER,
-//      allowNull: true,
-//      validate: {
-//        min: 0,
-//        max: 120
-//      }
-//    }
-//  }, {
-//    tableName: 'Users',
-//    timestamps: true, // Adds createdAt and updatedAt
-//    underscored: false // Use camelCase instead of snake_case
-//  });
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
 
-//  return User;
-// };
+      description: {
+        type: DataTypes.STRING(500),
+        allowNull: false,
+      },
+
+      ingredients: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: false,
+      },
+
+      instructions: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: false,
+      },
+
+      cooking_time: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+      },
+
+      servings: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+
+      difficulty: {
+        type: DataTypes.ENUM("easy", "medium", "hard"),
+        allowNull: false,
+      },
+
+      image_url: {
+        type: DataTypes.STRING,
+      },
+
+      is_public: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
+
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
+
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
+    },
+    {
+      tableName: "recipes",
+      timestamps: true,
+      underscored: false,
+    },
+  );
+
+  return Recipe;
+};

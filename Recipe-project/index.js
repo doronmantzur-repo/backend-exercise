@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const port = 8080;
 const recipeRouter = require("./routes/recipeRoutes.js");
+const authRouter = require("./routes/authRoutes.js");
 const logger = require("./middlewares/logger.js");
 
 const cors = require("cors");
@@ -19,6 +20,7 @@ app.use(cors());
 //middleware that parse JSON every route
 app.use(express.json());
 app.use("/recipes", recipeRouter);
+app.use("/auth", authRouter);
 
 //error handling middleware - has to be the last middleware
 //Usually it is implemented inline
@@ -33,6 +35,7 @@ app.use((err, req, res, next) => {
 recipeRouter.get("/", (req, res) => {
   res.send("Hello World!");
 });
+
 
 // app.get("/demo", (req, res) => {
 //     console.log("Headers:", req.headers);
