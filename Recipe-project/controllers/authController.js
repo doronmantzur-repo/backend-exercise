@@ -44,4 +44,13 @@ async function register(req, res, next) {
   }
 }
 
-module.exports = { login, register };
+async function profile(req, res, next) {
+  try {
+    const user = await authModel.getProfile(req.user.id);
+    res.status(200).json(user);
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { login, register, profile };
