@@ -24,4 +24,12 @@ async function login(email, password) {
   return userNoPassword;
 }
 
-module.exports = { login };
+async function register(userData) {
+  const hashedPassword = await bcrypt.hash(userData.password, 10);
+  const user = { ...userData, password: hashedPassword };
+  users.push(user);
+  const { password: _, ...userNoPassword } = user;
+  return userNoPassword;
+}
+
+module.exports = { login, register };
