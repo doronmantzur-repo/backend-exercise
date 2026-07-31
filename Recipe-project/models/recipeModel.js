@@ -7,10 +7,6 @@ async function getRecipes(userId) {
   const [recipes] = await sequelize.query(query, {
     replacements: [userId],
   });
-  // const sqlList =
-  //   "(" + results.map((item) => `'${item.recipe_id}'`).join(", ") + ")";
-  // query = `SELECT * FROM recipes WHERE id IN ${sqlList}`;
-  // const [recipes] = await sequelize.query(query);
   return recipes;
 }
 
@@ -213,19 +209,6 @@ async function getRecipeByQuery(queryObj, userId) {
     }
   }
   return filteredRecipes;
-}
-
-async function writeRecipesToFile(recipes) {
-  try {
-    await fs.promises.writeFile(
-      "./data/recipes.json",
-      JSON.stringify(recipes, null, 2),
-    );
-  } catch (err) {
-    const error = new Error("Error writing recipes to file" + err.message);
-    error.status = 500;
-    throw error;
-  }
 }
 
 module.exports = {
