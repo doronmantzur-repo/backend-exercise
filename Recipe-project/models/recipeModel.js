@@ -146,7 +146,7 @@ async function deleteRecipe(id, userId) {
       replacements: { id, userId },
     });
 
-    recipe = rows[0]; 
+    recipe = rows[0];
     if (!recipe) {
       throw new Error("Recipe not found or does not belong to user");
     }
@@ -170,10 +170,9 @@ async function deleteRecipe(id, userId) {
   return recipe; // return the deleted recipe
 }
 
-
 async function getRecipeByQuery(queryObj, userId) {
-  const recipes = await getRecipes(userId);
-  let filteredRecipes = recipes;
+  let filteredRecipes = [];
+  let query = ``;
   for (const key in queryObj) {
     const value = queryObj[key];
 
@@ -188,18 +187,25 @@ async function getRecipeByQuery(queryObj, userId) {
       case "cooking_time":
         const num = Number(value);
         console.log("Max cooking time:", num);
-        filteredRecipes = filteredRecipes.filter(
-          (recipe) => recipe.cooking_time <= num,
-        );
+        query = `SELECT *
+                  FROM recipes
+                  WHERE cooking_time > :time;`;
+        [filteredRecipes] = await sequelize.query(query, {
+          replacements: { num },
+        });
         break;
 
       case "search":
         console.log("Search term:", value);
-        filteredRecipes = filteredRecipes.filter(
-          (recipe) =>
-            recipe.title.toLowerCase().includes(value.toLowerCase()) ||
-            recipe.description.toLowerCase().includes(value.toLowerCase()),
-        );
+
+        query = `SELECT *
+                  FROM recipes
+                  WHERE user_id = :userId
+                    AND (title ILIKE '%' || :str || '%' 
+                      OR description ILIKE '%' || :str || '%');`;
+        [filteredRecipes] = await sequelize.query(query, {
+          replacements: { userId, str: value },
+        });
         break;
 
       default:

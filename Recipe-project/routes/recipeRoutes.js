@@ -15,9 +15,9 @@ const {authenticate} = require("../middlewares/authenticate.js");
 
 router.get("/", authenticate, getRecipes);
 
-router.get("/search", validateRecipeQuery, getRecipesByQuery);
+router.get("/search",authenticate, validateRecipeQuery, getRecipesByQuery);
 
-router.get("/:id", getRecipeById);
+router.get("/:id",authenticate, getRecipeById);
 
 router.post("/",authenticate, recipeValidation, addRecipe);
 
