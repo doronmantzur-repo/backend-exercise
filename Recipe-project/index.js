@@ -8,6 +8,7 @@ const logger = require("./middlewares/logger.js");
 const cors = require("cors");
 
 app.use(logger);
+app.use(express.static("public/")); //exposes public folder
 
 //by cors I can define the domains that are allowed to access the API (this is a browser protection)
 //for example

@@ -29,7 +29,7 @@ async function getRecipeById(req, res) {
 async function addRecipe(req, res) {
   try {
     const userId = req.user.id;
-    const newRecipe = await recipeModel.addRecipe(req.body, userId);
+    const newRecipe = await recipeModel.addRecipe(req.body, userId, req.file? req.file.path: null);
     res.status(201).json(newRecipe);
   } catch (error) {
     res.status(500).send("Error adding recipe");

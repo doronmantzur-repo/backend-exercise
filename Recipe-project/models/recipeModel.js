@@ -1,6 +1,7 @@
 const fs = require("fs");
 const { sequelize } = require("../db/models/index.js");
 const { v4: uuidv4 } = require("uuid");
+const cloudinary = require("cloudinary").v2;
 
 async function getRecipes(userId) {
   let query = "SELECT * FROM recipes WHERE user_id = ?";
@@ -18,7 +19,21 @@ async function getRecipeById(id) {
   return recipes[0];
 }
 
-async function addRecipe(newRecipe, userId) {
+async function addRecipe(newRecipe, userId, filePath) {
+  let secure_url;
+  if (filePath) {
+    //it is bette to implement this in a retries mechanism
+    try {
+      secure_url = await cloudinary.uploader.upload(filePath);
+      console.log(secure_url);
+    } catch (error) {
+      throw new Error("Error uploading image to Cloudinary");
+    } finally {
+      if (secure_url) {
+        fs.unlinkSync(filePath);
+      }
+    }
+  }
   const id = uuidv4();
   const createdAt = new Date().toISOString();
   const updatedAt = createdAt;
@@ -68,7 +83,7 @@ RETURNING *;
         cooking_time: newRecipe.cooking_time,
         servings: newRecipe.servings,
         difficulty: newRecipe.difficulty,
-        image_url: newRecipe.image_url,
+        image_url: filePath,
         is_public: newRecipe.is_public ?? true,
         created_at: createdAt,
         updated_at: updatedAt,
